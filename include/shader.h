@@ -1,7 +1,7 @@
 #ifndef SHADER_H
 #define SHADER_H
 
-#include <glad/glad.h>
+#include "include/glad/glad.h"
 
 #include <string>
 #include <fstream>
@@ -13,6 +13,7 @@ public:
     unsigned int ID;
 
     Shader(const char* vertexPath, const char* fragmentPath) {
+        // reading files
         std::string vertexSource;
         std::string fragmentSource;
         std::ifstream vertexShaderFile;
@@ -40,6 +41,24 @@ public:
 
         const char* vertexShaderSource = vertexSource.c_str();
         const char* fragmentShaderSource = fragmentSource.c_str();
+
+        // Compilation
+        unsigned int vertex, fragment;
+        int success;
+        char infoLog[512];
+
+        vertex = glCreateShader(GL_VERTEX_SHADER);
+        glShaderSource(vertex, 1, &vertexShaderSource, NULL);
+        glCompileShader(vertex);
+        glGetShaderiv(vertex, GL_COMPILE_STATUS, &success);
+        if(!success) {
+            glGetShaderInfoLog(vertex, 512, NULL, infoLog);
+            std::cout << "Vertex shader compilation failed\n" << infoLog << std::endl;
+        }
+
+        fragment = glCreateShader(GL_FRAGMENT_SHADER);
+        glShaderSource(fragment, 1, &fragmentShaderSource, NULL);
+
     }
 
     void use();

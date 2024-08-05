@@ -1,7 +1,3 @@
-/*
-    Developed following the tutorial at https://learnopengl.com/book/book_pdf.pdf
-*/
-
 #include "include/glad/glad.h"
 #include <GLFW/glfw3.h>
 #include "include/shader.h"
