@@ -80,6 +80,10 @@ public:
         glDeleteShader(fragment);
     }
 
+    void deleteShader() {
+        glDeleteProgram(ID);
+    }
+
     void use() {
         glUseProgram(ID);
     }
