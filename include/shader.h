@@ -58,14 +58,41 @@ public:
 
         fragment = glCreateShader(GL_FRAGMENT_SHADER);
         glShaderSource(fragment, 1, &fragmentShaderSource, NULL);
+        glCompileShader(fragment);
+        glGetShaderiv(fragment, GL_COMPILE_STATUS, &success);
+        if(!success) {
+            glGetShaderInfoLog(fragment, 512, NULL, infoLog);
+            std::cout << "Fragment shader compilation failed\n" << infoLog << std::endl;
+        }
 
+        // Shader Linking
+        ID = glCreateProgram();
+        glAttachShader(ID, vertex);
+        glAttachShader(ID, fragment);
+        glLinkProgram(ID);
+        glGetProgramiv(ID, GL_LINK_STATUS, &success);
+        if(!success) {
+            glGetProgramInfoLog(ID, 512, NULL, infoLog);
+            std::cout << "Shader program linking failed" << infoLog << std::endl;
+        }
+
+        glDeleteShader(vertex);
+        glDeleteShader(fragment);
     }
 
-    void use();
+    void use() {
+        glUseProgram(ID);
+    }
 
-    void setBool(const std::string &name, bool value) const;
-    void setInt(const std::string &name, int value) const;
-    void setFloat(const std::string &name, float value) const;
+    void setBool(const std::string &name, bool value) const {
+        glUniform1i(glGetUniformLocation(ID, name.c_str()), (int)value);
+    }
+    void setInt(const std::string &name, int value) const {
+        glUniform1i(glGetUniformLocation(ID, name.c_str()), (int)value);
+    }
+    void setFloat(const std::string &name, float value) const {
+        glUniform1f(glGetUniformLocation(ID, name.c_str()), (int)value);
+    }
 };
 
 #endif
